@@ -1,0 +1,10 @@
+@{
+    ViewBag.Title = "Confirm email";
+    Layout = "_Layout";
+}
+<h1>@ViewData["Title"].</h1>
+<div class="rounded-3 bg-opacity-10 bg-success p-2 text-white">
+    <h5 class="p-5">
+        Thank you for confirming your email. Now you can <a class="text-dark" asp-controller="Account" asp-action="Login">log in</a>!
+    </h5>
+</div>

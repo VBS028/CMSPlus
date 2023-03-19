@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Migrations\V1_1_1__Create_Topic_Table.sql" />
+    <None Remove="Migrations\V1_2_1__Create_Blogs_Table.sql" />
+    <None Remove="Migrations\V1_2_2__Add_FK_To_AspNetUsers.sql" />
+    <None Remove="Migrations\V1_2_5__Add_Blog_Main_Columns.sql" />
+    <None Remove="Migrations\V1_2_6__Remove_FK_Comments_Users.sql" />
+    <None Remove="Migrations\V1_3_1__Add_Creator_Id_Column_To_Blog_And_Topic.sql" />
+    <None Remove="Migrations\V1_3_2__Enable_On_Casdace_Delete-Update.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Migrations\V1_1_1__Create_Topic_Table.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Migrations\V1_2_1__Create_Blogs_Table.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Migrations\V1_2_2__Add_FK_To_AspNetUsers.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Migrations\V1_2_5__Add_Blog_Main_Columns.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Migrations\V1_2_6__Remove_FK_Comments_Users.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Migrations\V1_3_1__Add_Creator_Id_Column_To_Blog_And_Topic.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Migrations\V1_3_2__Enable_On_Casdace_Delete-Update.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CMSPlus.Application\CMSPlus.Application.csproj" />
+    <ProjectReference Include="..\CMSPlus.Domain\CMSPlus.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,29 @@
+@model CMSPlus.Domain.Models.TopicModels.BlogEditViewViewModel
+
+@{
+    Layout = "_Layout";
+}
+<partial name="_RichTextEditorPartial"/>
+<form method="post">
+    <p>@Html.ValidationSummary()</p>
+    <div class="form-group">
+        <input hidden asp-for="Id"/>
+        <input hidden asp-for="CreatorId"/>
+        <input hidden asp-for="CreatedOnUtc"></input>
+        <label asp-for="Title" class="m-1"></label>
+        <input asp-for="Title" class="form-control"></input>
+        <label asp-for="Body" class="m-1"></label>
+        <textarea asp-for="Body"></textarea>
+        <label asp-for="SystemName" class="m-1"></label>
+        <input asp-for="SystemName" class="form-control"></input>
+    </div>
+    <div class="row">
+        <div class="col-6 text-start">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Topic" asp-action="Index" class="btn btn-primary">Back to list</a>
+        </div>
+    </div>
+</form>
+

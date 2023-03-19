@@ -1,0 +1,47 @@
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.AspNetCore.Authorization
+@model IEnumerable<CMSPlus.Domain.Models.TopicModels.TopicViewViewModel>
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewBag.Title = "Topics";
+    Layout = "_Layout";
+}
+<div class="container mt-3">
+    <div class="row">
+        <h1 class="col-6 text-black-50">Topics List</h1>
+       
+        <div class="col-6 text-end">
+            <a class="btn btn-primary text-center px-2 mx-3" style="width: 10%" asp-controller="Topic" asp-action="Create">Create</a>
+        </div>
+        
+    </div>
+    <hr/>
+    @foreach (var topic in Model)
+    {
+        <div class="col mt-3 border rounded">
+            <h2 class="row-12 text-center mt-2">@topic.Title</h2>
+            <hr class="m-3"/>
+            <div class="row mx-2">
+                <p class="text-black-50 col-6">Created: @topic.CreatedOnUtc</p>
+                <p class="text-black-50 col-6 text-end">Updated: @topic.UpdatedOnUtc</p>
+            </div>
+            <div class="row-12 mx-3">
+                <p class="fs-6">@Html.Raw(topic.Body)</p>
+            </div>
+
+            <p class="row-12 text-end text-black-50 mx-2">@topic.SystemName</p>
+            <div class="row-12 text-end m-2">
+                @if (AuthorizationService.AuthorizeAsync(User, Permissions.Topic.Edit).Result.Succeeded)
+                {
+                    <a asp-controller="Topic" asp-action="Edit" asp-route-id="@topic.Id" class="btn btn-primary m-auto">Edit</a>
+                }
+                @if (AuthorizationService.AuthorizeAsync(User, Permissions.Topic.Delete).Result.Succeeded)
+                {
+                    <a asp-controller="Topic" asp-action="Delete" asp-route-id="@topic.Id" class="btn btn-primary m-auto">Delete</a>
+                }
+                <a asp-controller="Topic" asp-action="Details" asp-route-systemname="@topic.SystemName" class="btn btn-primary m-auto">Details</a>
+            </div>
+        </div>
+    }
+</div>

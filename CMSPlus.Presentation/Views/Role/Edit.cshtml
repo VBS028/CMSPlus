@@ -1,0 +1,46 @@
+@model CMSPlus.Domain.Models.RoleModels.RoleEditViewModel
+
+@{
+    ViewBag.Title = "Edit a role";
+    Layout = "_Layout";
+}
+<div class="row">
+    <h1 class="col-6 text-black-50">Edit @Model.Name's role</h1>
+</div>
+<form method="post">
+    <p>@Html.ValidationSummary()</p>
+    <div class="form-group">
+        <input hidden asp-for="Id"></input>
+        <label asp-for="Name" class="m-1"></label>
+        <input required="required" asp-for="Name" class="m-1 form-control"/>
+        <table class="table">
+            <thead>
+            <th>Role</th>
+            <th>Status</th>
+            </thead>
+            <tbody>
+            @for(int i=0;i<Model.Permissions.Count();i++)
+            {
+                <tr>
+                    <td>
+                        <input asp-for="@Model.Permissions[i].Name" type="hidden"/>
+                        @Model.Permissions[i].Name
+                    </td>
+                    <td>
+                        <input asp-for="@Model.Permissions[i].IsSelected" class="form-check-input"></input>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-6 text-start">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Role" asp-action="Index" class="btn btn-primary">Back to list</a>
+        </div>
+    </div>
+</form>
+

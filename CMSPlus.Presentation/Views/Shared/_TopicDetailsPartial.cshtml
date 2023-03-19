@@ -1,0 +1,13 @@
+@model CMSPlus.Domain.Models.TopicModels.TopicDetailsViewViewModel
+
+<div class="container m-3">
+    <h1 class="row-12 text-black">@Model.Title</h1>
+    <div class="row">
+        <p class="col-6 text-start text-black-50">Updated: @Model.UpdatedOnUtc</p>
+        <p class="col-6 text-end text-black-50">Created: @Model.CreatedOnUtc</p>
+    </div>
+    <p class="row-12 text-black">@Html.Raw(Model.Body)</p>
+    <div class="row">
+        <p class="col-12 text-black-50 text-end">System name: @Model.SystemName</p>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+@model CMSPlus.Domain.Models.RoleModels.RoleCreateViewModel
+
+@{
+    ViewBag.Title = "Create new role";
+    Layout = "_Layout";
+}
+<div class="row">
+    <h1 class="col-6 text-black-50">Create new role</h1>
+</div>
+<hr/>
+<form method="post">
+    <p>@Html.ValidationSummary()</p>
+    <div class="form-group">
+        <label asp-for="Name" class="m-1"></label>
+        <input required="required" asp-for="Name" class="form-control"></input>
+    </div>
+    <div class="row-12 text-start">
+        <button type="submit" class="btn btn-primary" style="width: 10%">Submit</button>
+    </div>
+</form>
+

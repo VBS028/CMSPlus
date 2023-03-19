@@ -1,0 +1,35 @@
+@model IEnumerable<CMSPlus.Domain.Models.UserModels.UserViewModel>
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "_Layout";
+}
+<div class="row">
+    <h1 class="col-6 text-black-50">Users</h1>
+</div>
+<hr/>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Email</th>
+        <th scope="col">Utilities</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <th style="font-weight: normal" scope="row">@user.Id</th>
+            <th style="font-weight: normal" scope="row">
+                @user.Email
+            </th>
+            <th class="text-center">
+                <a asp-controller="User" asp-action="EditUserRoles" asp-route-userId="@user.Id" class="btn btn-light m-auto">Manage roles</a>
+            </th>
+        </tr>
+    }
+    
+    </tbody>
+</table>

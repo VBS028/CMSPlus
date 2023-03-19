@@ -1,0 +1,21 @@
+@model CMSPlus.Domain.Models.TopicModels.TopicDetailsViewViewModel
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using CMSPlus.Domain.Models.UserModels
+@inject IAuthorizationService AuthorizationService
+@{
+    Layout = "_Layout";
+}
+<partial name="_TopicDetailsPartial"/>
+
+<form method="post" class="m-3">
+    <input hidden asp-for="Body"></input>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="col-6 text-start">
+            <button type="submit" class="btn btn-primary">Get body to email</button>
+        </div>
+    }
+</form>
+    
+

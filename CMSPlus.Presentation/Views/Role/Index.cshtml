@@ -1,0 +1,45 @@
+@using CMSPlus.Presentation;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<CMSPlus.Domain.Models.RoleModels.RoleGetViewModel>
+
+@{
+    ViewBag.Title = "Roles";
+    Layout = "_Layout";
+}
+<div class="row">
+    <h1 class="col-6 text-black-50">Roles</h1>
+    <div class="col-6 text-end">
+        <a class="btn btn-primary text-center px-2 mx-3" style="width: 10%" asp-controller="Role" asp-action="Create">Create</a>
+    </div>
+</div>
+<hr/>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th scope="col">Role Name</th>
+        <th scope="col">Members</th>
+        <th scope="col">Utilities</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var role in Model)
+    {
+        <tr>
+            <th style="font-weight: normal" scope="row">@role.Name</th>
+            <th scope="row">
+                @foreach (var user in role.Members)
+                {
+                    <p style="font-weight: normal">@user</p>
+                }
+            </th>
+            <th class="w-25 text-center">
+                <a asp-controller="Role" asp-action="Edit" asp-route-id="@role.Id" class="btn btn-light">Manage permissions</a>
+                <a asp-controller="Role" asp-action="Delete" asp-route-id="@role.Id" class="btn btn-light">Delete</a>
+            </th>
+            
+        </tr>
+    }
+    
+    </tbody>
+</table>

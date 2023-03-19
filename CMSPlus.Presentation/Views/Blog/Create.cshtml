@@ -1,0 +1,22 @@
+@model CMSPlus.Domain.Models.TopicModels.BlogCreateViewModel
+
+@{
+    ViewBag.Title = "Create a blog";
+    Layout = "_Layout";
+}
+<h1>@ViewData["Title"].</h1>
+<partial name="_RichTextEditorPartial"/>
+<form method="post">
+    <p>@Html.ValidationSummary()</p>
+    <div class="form-group">
+        <label asp-for="Title" class="m-1"></label>
+        <input asp-for="Title" class="form-control"></input>
+        <label asp-for="Body" class="m-1"></label>
+        <textarea asp-for="Body" id="div_editor1"></textarea>
+        <label asp-for="SystemName" class="m-1"></label>
+        <input asp-for="SystemName" class="form-control"></input>
+    </div>
+    <div class="row-12 m-3 text-center">
+        <button type="submit" class="btn btn-primary" style="width: 10%">Submit</button>
+    </div>
+</form>
