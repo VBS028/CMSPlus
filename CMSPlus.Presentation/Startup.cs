@@ -1,6 +1,5 @@
 using CMSPlus.Domain;
 using CMSPlus.Application;
-using CMSPlus.Application.Services.EmailService;
 using CMSPlus.Infrastructure;
 
 namespace CMSPlus.Presentation;
@@ -17,7 +16,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
     {
         var connectionString = Configuration.GetConnectionString("DefaultConnection");
-        services.Configure<EmailConfiguration>(Configuration.GetSection("EmailConfiguration"));
+
 
         services.AddSingleton(env);
         services.AddSingleton(Configuration);

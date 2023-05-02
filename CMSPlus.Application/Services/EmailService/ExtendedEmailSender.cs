@@ -6,16 +6,17 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace CMSPlus.Application.Services.EmailService
 {
-    public class ExtendedEmailService:IExtendedEmailService
+    public class ExtendedEmailSender:IExtendedEmailSender
     {
-        public EmailConfiguration _emailConfiguration { get; }
-        public ExtendedEmailService(IOptions<EmailConfiguration> emailConfiguration)
+        private IEmailConfiguration _emailConfiguration;
+        public ExtendedEmailSender(IEmailConfiguration emailConfiguration)
         {
-            _emailConfiguration = emailConfiguration.Value;
+            _emailConfiguration = emailConfiguration;
         }
 
         private async Task ExecuteWithAttachment(List<string> emails, string subject, string htmlMessage, string attachmentPath)
@@ -52,7 +53,7 @@ namespace CMSPlus.Application.Services.EmailService
             }
         }
 
-        public async Task SendEmailWithAttachmentAsync(List<string> emails, string subject, string body, string attachmentPath)
+        public async Task SendEmailAsync(List<string> emails, string subject, string body, string attachmentPath)
         {
             await ExecuteWithAttachment(emails, subject, body, attachmentPath);
         }

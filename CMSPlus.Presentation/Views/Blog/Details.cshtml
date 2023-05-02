@@ -1,24 +1,29 @@
-@using CMSPlus.Domain.Models.TopicModels
-@model CMSPlus.Domain.Models.TopicModels.BlogGetViewViewModel
+@using CMSPlus.Presentation.Models.BlogModels;
+@model BlogGetViewViewModel
 
 @{
-        Layout = "_Layout";
+    Layout = "_Layout";
 }
-<h1>@ViewData["Title"].</h1>
 <div class="container m-3">
-    <h1 class="row-12 text-black">@Model.Title</h1>
+    <h1 class="col-6 text-black">@Model.Title</h1>
+
     <div class="row">
-        <p class="col-6 text-start text-black-50">Updated: @Model.UpdatedOnUtc</p>
-        <p class="col-6 text-end text-black-50">Created: @Model.CreatedOnUtc</p>
+        @if (!string.IsNullOrEmpty(Model.Author))
+        {
+            <p class="text-black-50 col-6">Author: @Model.Author</p>
+        }
+        <p class="text-black-50 col-3">Created: @Model.CreatedOnUtc</p>
+        <p class="text-black-50 col-3">Updated: @Model.UpdatedOnUtc</p>
     </div>
     <p class="row-12 text-black">@Html.Raw(Model.Body)</p>
     <div class="row">
         <p class="col-12 text-black-50 text-end">System name: @Model.SystemName</p>
     </div>
 </div>
+
 <div class="container mt-3">
     <h5 class="text-black">Add new comment:</h5>
-    @Html.Partial("_BlogCommentFormPartial",new BlogCommentCreateViewModel(){BlogId = Model.Id})
+    @Html.Partial("_BlogCommentFormPartial", new BlogCommentCreateViewModel() { BlogId = Model.Id })
 </div>
 
 <div class="container my-3">
@@ -35,8 +40,3 @@
         <p class="text-dark">@Html.Raw(comment.Body)</p>
     </div>
 }
-
-
-
-    
-
