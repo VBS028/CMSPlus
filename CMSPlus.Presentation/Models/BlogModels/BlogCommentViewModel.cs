@@ -1,4 +1,4 @@
-namespace CMSPlus.Domain.Models.TopicModels;
+namespace CMSPlus.Presentation.Models.BlogModels;
 
 public class BlogCommentViewModel
 {

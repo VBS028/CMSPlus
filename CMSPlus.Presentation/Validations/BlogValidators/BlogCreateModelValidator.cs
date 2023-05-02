@@ -1,4 +1,4 @@
-using CMSPlus.Domain.Models.TopicModels;
+using CMSPlus.Presentation.Models.BlogModels;
 using CMSPlus.Presentation.Validations.Helpers;
 using FluentValidation;
 
@@ -10,10 +10,6 @@ public class BlogCreateModelValidator:AbstractValidator<BlogCreateViewModel>
     public BlogCreateModelValidator(ValidatorHelpers validatorHelpers)
     {
         _validatorHelpers = validatorHelpers;
-        RuleFor(blog => blog.SystemName)
-            .MustAsync(_validatorHelpers.IsBlogSystemNameUnique).WithMessage("System name must be unique");
-        RuleFor(blog => blog.SystemName)
-            .Must(_validatorHelpers.IsUrl).WithMessage("The system name is not an URL");
         RuleFor(blog => blog.Body).NotEmpty();
         RuleFor(blog => blog.SystemName).NotEmpty();
     }

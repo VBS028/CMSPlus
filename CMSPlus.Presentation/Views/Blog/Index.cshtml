@@ -1,6 +1,7 @@
 @using Microsoft.AspNetCore.Authorization
+@using CMSPlus.Presentation.Models.BlogModels;
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model IEnumerable<CMSPlus.Domain.Models.TopicModels.BlogGetViewViewModel>
+@model IEnumerable<BlogGetViewViewModel>
 @inject IAuthorizationService AuthorizationService
 @{
     Layout = "_Layout";
@@ -11,7 +12,7 @@
         <div class="col-6 text-end">
             <a class="btn btn-primary text-center px-2 mx-3" style="width: 10%" asp-controller="Blog" asp-action="Create">Create</a>
         </div>
-        
+
     </div>
     <hr/>
     @foreach (var blog in Model)
@@ -20,8 +21,12 @@
             <h1 class="row-12 text-center mt-2">@blog.Title</h1>
             <hr class="m-3"/>
             <div class="row mx-2">
-                <p class="text-black-50 col-6">Created: @blog.CreatedOnUtc</p>
-                <p class="text-black-50 col-6 text-end">Updated: @blog.UpdatedOnUtc</p>
+                @if (!string.IsNullOrEmpty(blog.Author))
+                {
+                    <p class="text-black-50 col-6">Author: @blog.Author</p>
+                }
+                <p class="text-black-50 col-3">Created: @blog.CreatedOnUtc</p>
+                <p class="text-black-50 col-3">Updated: @blog.UpdatedOnUtc</p>
             </div>
             <div class="row-12 text-end m-2">
                 @if (AuthorizationService.AuthorizeAsync(User, Permissions.Blog.Edit).Result.Succeeded)
@@ -33,7 +38,7 @@
                     <a asp-controller="Blog" asp-action="Delete" asp-route-id="@blog.Id" class="btn btn-primary m-auto">Delete</a>
                 }
                 <a asp-controller="Blog" asp-action="Details" asp-route-id="@blog.Id" class="btn btn-primary m-auto">Details</a>
-                </div>
+            </div>
         </div>
     }
 </div>

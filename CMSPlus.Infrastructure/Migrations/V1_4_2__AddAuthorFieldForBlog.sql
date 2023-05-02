@@ -1,0 +1,1 @@
+﻿ALTER TABLE [dbo].[Blogs] ADD [Author] NVARCHAR(128) NULL

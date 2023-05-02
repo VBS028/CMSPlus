@@ -8,10 +8,10 @@ namespace CMSPlus.Application.Services.EmailService;
 
 public class EmailSender : IEmailSender
 {
-    public EmailConfiguration _emailConfiguration { get; }
-    public EmailSender(IOptions<EmailConfiguration> emailConfiguration)
+    private readonly IEmailConfiguration _emailConfiguration;
+    public EmailSender(IEmailConfiguration emailConfiguration)
     {
-        _emailConfiguration = emailConfiguration.Value;
+        _emailConfiguration = emailConfiguration;
     }
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
