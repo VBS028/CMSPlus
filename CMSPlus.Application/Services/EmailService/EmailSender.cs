@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Mail;
 using CMSPlus.Domain.Interfaces;
+using CMSPlus.Domain.Interfaces.Factories;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 
@@ -9,9 +10,11 @@ namespace CMSPlus.Application.Services.EmailService;
 public class EmailSender : IEmailSender
 {
     private readonly IEmailConfiguration _emailConfiguration;
-    public EmailSender(IEmailConfiguration emailConfiguration)
+    private readonly IEmailMessageFactory _emailMessageFactory;
+    public EmailSender(IEmailMessageFactory emailMessageFactory)
     {
-        _emailConfiguration = emailConfiguration;
+        _emailConfiguration = EmailConfiguration.Instance;
+        _emailMessageFactory = emailMessageFactory;
     }
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -23,16 +26,7 @@ public class EmailSender : IEmailSender
     {
         try
         {
-            MailMessage mail = new MailMessage()
-            {
-                From = new MailAddress(_emailConfiguration.FromAddress)
-            };
-
-            mail.To.Add(new MailAddress(email));
-
-            mail.Subject = subject;
-            mail.IsBodyHtml = true;
-            mail.Body = htmlMessage;
+            var mail = _emailMessageFactory.CreateMailMessage(email, subject, htmlMessage);
 
             using (SmtpClient smtp = new SmtpClient(_emailConfiguration.Address, _emailConfiguration.Port))
             {

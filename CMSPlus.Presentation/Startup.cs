@@ -17,7 +17,6 @@ public class Startup
     {
         var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-
         services.AddSingleton(env);
         services.AddSingleton(Configuration);
         services.AddInfrastructure(connectionString);

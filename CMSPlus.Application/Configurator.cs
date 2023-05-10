@@ -21,7 +21,7 @@ public static class Configurator
         services.AddScoped<IBlogService, BlogService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IBlogCommentsService, BlogCommentService>();
-        services.AddScoped<IBlogCommentFactory, BlogCommentFactory>();
+        services.AddScoped<IEmailMessageFactory, EmailMessageFactory>();
         services.AddScoped<IBlogBuilder, BlogBuilder>();
     }
 }

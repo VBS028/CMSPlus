@@ -1,44 +1,27 @@
 ﻿using CMSPlus.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using CMSPlus.Domain.Interfaces.Factories;
 
 namespace CMSPlus.Application.Services.EmailService
 {
     public class ExtendedEmailSender:IExtendedEmailSender
     {
-        private IEmailConfiguration _emailConfiguration;
-        public ExtendedEmailSender(IEmailConfiguration emailConfiguration)
+        private readonly IEmailConfiguration _emailConfiguration;
+        private readonly IEmailMessageFactory _emailMessageFactory;
+        public ExtendedEmailSender(IEmailMessageFactory emailMessageFactory)
         {
-            _emailConfiguration = emailConfiguration;
+            _emailConfiguration = EmailConfiguration.Instance;
+            _emailMessageFactory = emailMessageFactory;
         }
 
-        private async Task ExecuteWithAttachment(List<string> emails, string subject, string htmlMessage, string attachmentPath)
+        private async Task ExecuteWithAttachment(string emails, string subject, string htmlMessage, string attachmentPath)
         {
             try
             {
-                MailMessage mail = new MailMessage()
-                {
-                    From = new MailAddress(_emailConfiguration.FromAddress)
-                };
-
-                foreach (var email in emails)
-                {
-                    mail.To.Add(new MailAddress(email));
-                }
-
-                mail.Subject = subject;
-                mail.IsBodyHtml = true;
-                mail.Body = htmlMessage;
-                Attachment attachment = new Attachment(attachmentPath);
-                mail.Attachments.Add(attachment);
-
+                var mail = _emailMessageFactory.CreateMailMessageWithAttachments(emails, subject, htmlMessage,
+                    attachmentPath);   
+                
                 using (SmtpClient smtp = new SmtpClient(_emailConfiguration.Address, _emailConfiguration.Port))
                 {
                     smtp.Credentials = new NetworkCredential(_emailConfiguration.Username, _emailConfiguration.Password);
@@ -53,7 +36,7 @@ namespace CMSPlus.Application.Services.EmailService
             }
         }
 
-        public async Task SendEmailAsync(List<string> emails, string subject, string body, string attachmentPath)
+        public async Task SendEmailAsync(string emails, string subject, string body, string attachmentPath)
         {
             await ExecuteWithAttachment(emails, subject, body, attachmentPath);
         }

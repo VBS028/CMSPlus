@@ -29,7 +29,6 @@ public class BlogController : Controller
     private readonly IExtendedEmailSender _extendedEmailSender;
     private readonly IFileService _fileService;
     private readonly IBlogCommentsService _blogCommentsService;
-    private readonly IBlogCommentFactory _blogCommentFactory;
     private readonly IBlogBuilder _blogBuilder;
 
 
@@ -43,8 +42,7 @@ public class BlogController : Controller
         IConfiguration configuration,
         IExtendedEmailSender extendedEmailSender,
         IFileService fileService,
-        IBlogCommentsService blogCommentsService,
-        IBlogCommentFactory blogCommentFactory, IBlogBuilder blogBuilder)
+        IBlogCommentsService blogCommentsService,IBlogBuilder blogBuilder)
     {
         _blogService = blogService;
         _mapper = mapper;
@@ -56,7 +54,6 @@ public class BlogController : Controller
         _extendedEmailSender = extendedEmailSender;
         _fileService = fileService;
         _blogCommentsService = blogCommentsService;
-        _blogCommentFactory = blogCommentFactory;
         _blogBuilder = blogBuilder;
     }
 
@@ -137,7 +134,7 @@ public class BlogController : Controller
             var adminsEmails = admins.Select(x => x.Email).ToList();
             if (!adminsEmails.IsNullOrEmpty())
             {
-                await _extendedEmailSender.SendEmailAsync(adminsEmails, "blog attachment", "some body", zipPath);
+                await _extendedEmailSender.SendEmailAsync(string.Join('|', adminsEmails), "blog attachment", "some body", zipPath);
             }
         }
         else

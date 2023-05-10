@@ -37,8 +37,8 @@ public static class Configurator
             .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);;
         services.AddDatabaseDeveloperPageExceptionFilter();
         services.AddControllersWithViews();
-        services.AddScoped<IEmailSender,EmailSender>(x=>new EmailSender(EmailConfiguration.Instance));
-        services.AddScoped<IExtendedEmailSender,ExtendedEmailSender>(x=>new ExtendedEmailSender(EmailConfiguration.Instance));
+        services.AddScoped<IEmailSender,EmailSender>();
+        services.AddScoped<IExtendedEmailSender,ExtendedEmailSender>();
     }
 
     public static void AddAutoMapper(this IServiceCollection services)
