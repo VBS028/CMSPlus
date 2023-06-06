@@ -1,5 +1,8 @@
-namespace CMSPlus.Domain.Models.TopicModels;
+using CMSPlus.Domain.Models;
 
-public class BlogEditViewViewModel:BaseEditViewModel
+namespace CMSPlus.Presentation.Models.BlogModels;
+
+public class BlogEditViewViewModel : BaseEditViewModel
 {
+    public string Author { get; set; }
 }

@@ -1,6 +1,6 @@
+using System.Security.Cryptography;
 using AutoMapper;
 using CMSPlus.Domain.Entities;
-using CMSPlus.Domain.Models.TopicModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using CMSPlus.Domain.Interfaces.Services;
 using CMSPlus.Domain.Interfaces;
+using CMSPlus.Presentation.Models.BlogModels;
+using CMSPlus.Domain.Interfaces.Builders;
+using CMSPlus.Domain.Interfaces.Factories;
+using CMSPlus.Domain.Dtos;
+using CMSPlus.Presentation.Extentions;
 
 namespace CMSPlus.Presentation.Controllers;
 
@@ -21,9 +26,10 @@ public class BlogController : Controller
     private readonly IMapper _mapper;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _configuration;
-    private readonly IExtendedEmailService _extendedEmailService;
+    private readonly IExtendedEmailSender _extendedEmailSender;
     private readonly IFileService _fileService;
     private readonly IBlogCommentsService _blogCommentsService;
+    private readonly IBlogBuilder _blogBuilder;
 
 
     public BlogController(
@@ -34,9 +40,9 @@ public class BlogController : Controller
         IValidator<BlogCreateViewModel> createModelValidator,
         IValidator<BlogCommentCreateViewModel> commentValidator,
         IConfiguration configuration,
-        IExtendedEmailService extendedEmailService,
+        IExtendedEmailSender extendedEmailSender,
         IFileService fileService,
-        IBlogCommentsService blogCommentsService)
+        IBlogCommentsService blogCommentsService,IBlogBuilder blogBuilder)
     {
         _blogService = blogService;
         _mapper = mapper;
@@ -45,9 +51,10 @@ public class BlogController : Controller
         _createModelValidator = createModelValidator;
         _commentValidator = commentValidator;
         _configuration = configuration;
-        _extendedEmailService = extendedEmailService;
+        _extendedEmailSender = extendedEmailSender;
         _fileService = fileService;
         _blogCommentsService = blogCommentsService;
+        _blogBuilder = blogBuilder;
     }
 
     [AllowAnonymous]
@@ -77,10 +84,11 @@ public class BlogController : Controller
             return View(blog);
         }
 
-        var userId = _userManager.GetUserId(this.User);
-        if (userId != null)
+        var user = await _userManager.GetUserAsync(this.User);
+        if (user != null)
         {
-            blog.CreatorId = userId;
+            blog.CreatorId = user.Id;
+            blog.Author = user.UserName;
         }
         var blogEntity = _mapper.Map<BlogCreateViewModel, BlogEntity>(blog);
         await _blogService.Create(blogEntity);
@@ -112,9 +120,7 @@ public class BlogController : Controller
         {
             return RedirectToPage("/Account/Login", new {area="Identity"});
         }
-        comment.Username = identityUser.UserName;
         var commentEntity = _mapper.Map<BlogCommentCreateViewModel, BlogCommentEntity>(comment);
-        await _blogCommentsService.Create(commentEntity);
         if (comment.Files != null)
         {
             var rootPath = _configuration.GetValue<string>("AttachmentsPath");
@@ -128,9 +134,14 @@ public class BlogController : Controller
             var adminsEmails = admins.Select(x => x.Email).ToList();
             if (!adminsEmails.IsNullOrEmpty())
             {
-                await _extendedEmailService.SendEmailWithAttachmentAsync(adminsEmails,"blog attachment","some body",zipPath);
+                await _extendedEmailSender.SendEmailAsync(string.Join('|', adminsEmails), "blog attachment", "some body", zipPath);
             }
         }
+        else
+        {
+
+        }
+        await _blogCommentsService.Create(commentEntity);
         return RedirectToAction("Details",comment.BlogId);
     }
 
@@ -162,6 +173,21 @@ public class BlogController : Controller
         topicEntity = _mapper.Map(updatedEntity, topicEntity);
         await _blogService.Update(topicEntity);
         return RedirectToAction("Index");
+    }
+
+    [Authorize(Permissions.Blog.Create)]
+    public async Task<IActionResult> Clone(BlogEntity source)
+    {
+        var copy = (BlogEntity)source.Clone();
+        var user = this.User;
+        var identityUser = await _userManager.GetUserAsync(user);
+        if (!string.IsNullOrEmpty(identityUser?.UserName))
+        {
+            copy = _blogBuilder.From(copy).WithAuthor(identityUser.UserName).Build();
+        }
+        await _blogService.Create(copy);
+
+        return RedirectToAction("Details", new {id=copy.Id});
     }
     
     [Authorize(Permissions.Blog.Delete)]

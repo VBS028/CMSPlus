@@ -2,6 +2,7 @@ using CMSPlus.Domain.Models;
 using CMSPlus.Domain.Models.TopicModels;
 using CMSPlus.Domain.Interfaces.Services;
 using CMSPlus.Domain.Interfaces;
+using CMSPlus.Presentation.Models.BlogModels;
 
 namespace CMSPlus.Presentation.Validations.Helpers;
 

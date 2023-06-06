@@ -1,3 +1,5 @@
+using CMSPlus.Application.Services.EmailService;
+using CMSPlus.Domain.Interfaces;
 using CMSPlus.Domain.Models.TopicModels;
 using CMSPlus.Domain.Persistence;
 using CMSPlus.Presentation.AutoMapperProfiles;
@@ -9,6 +11,8 @@ using CMSPlus.Presentation.Validations.TopicValidators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace CMSPlus.Presentation;
 
@@ -33,6 +37,8 @@ public static class Configurator
             .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);;
         services.AddDatabaseDeveloperPageExceptionFilter();
         services.AddControllersWithViews();
+        services.AddScoped<IEmailSender,EmailSender>();
+        services.AddScoped<IExtendedEmailSender,ExtendedEmailSender>();
     }
 
     public static void AddAutoMapper(this IServiceCollection services)

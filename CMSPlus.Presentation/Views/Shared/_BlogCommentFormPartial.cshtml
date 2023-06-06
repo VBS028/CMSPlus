@@ -1,9 +1,10 @@
+@using CMSPlus.Presentation.Models.BlogModels;
 @using Microsoft.AspNetCore.Identity
 @using CMSPlus.Domain.Models.TopicModels
 @using System.Net
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@model CMSPlus.Domain.Models.TopicModels.BlogCommentCreateViewModel
+@model BlogCommentCreateViewModel
 
 @if (SignInManager.IsSignedIn(User))
 {

@@ -1,4 +1,4 @@
-using CMSPlus.Domain.Models.TopicModels;
+using CMSPlus.Presentation.Models.BlogModels;
 using FluentValidation;
 
 namespace CMSPlus.Presentation.Validations.BlogValidators;

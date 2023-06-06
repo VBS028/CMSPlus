@@ -12,7 +12,6 @@
     <None Remove="Migrations\V1_2_2__Add_FK_To_AspNetUsers.sql" />
     <None Remove="Migrations\V1_2_5__Add_Blog_Main_Columns.sql" />
     <None Remove="Migrations\V1_2_6__Remove_FK_Comments_Users.sql" />
-    <None Remove="Migrations\V1_3_1__Add_Creator_Id_Column_To_Blog_And_Topic.sql" />
     <None Remove="Migrations\V1_3_2__Enable_On_Casdace_Delete-Update.sql" />
   </ItemGroup>
 
@@ -32,12 +31,14 @@
     <Content Include="Migrations\V1_2_6__Remove_FK_Comments_Users.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Migrations\V1_3_1__Add_Creator_Id_Column_To_Blog_And_Topic.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Migrations\V1_3_2__Enable_On_Casdace_Delete-Update.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Remove="Migrations\V1_4_2__AddAuthorFieldForBlog.sql" />
+    <Content Include="Migrations\V1_4_2__AddAuthorFieldForBlog.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Remove="Migrations\V1_4_3__RenameAuthorId_to_Author.sql" />
   </ItemGroup>
 
   <ItemGroup>
