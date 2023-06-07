@@ -19,5 +19,14 @@ public class BlogProfile:Profile
         CreateMap<BlogCommentDto, BlogCreateViewModel>().ReverseMap();
         CreateMap<BlogCommentWithAttachmentDto, BlogCreateViewModel>().ReverseMap();
         CreateMap<BlogCommentWithAttachmentDto,BlogCommentDto>().ReverseMap();  
+        CreateMap<BlogCommentEntity, BlogCommentViewModel>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.BlogId))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+            .ForMember(dest => dest.Body, opt => opt.MapFrom(src => src.Body))
+            .ForMember(dest => dest.CreatedOnUtc, opt => opt.MapFrom(src => src.CreatedOnUtc))
+            .ForMember(dest => dest.UpdatedOnUtc, opt => opt.MapFrom(src => src.UpdatedOnUtc))
+            .ForMember(dest => dest.Replies, opt => opt.MapFrom(src => src.Replies))
+            .ReverseMap();
     }
 }

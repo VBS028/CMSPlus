@@ -10,7 +10,20 @@ public class BlogCommentEntityConfiguration:IEntityTypeConfiguration<BlogComment
     {
         builder.ToTable("BlogComments");
         builder.Property(x => x.Body).IsRequired();
-        builder.HasOne(d => d.Blog).WithMany(p => p.BlogComments)
-            .HasForeignKey(d => d.BlogId);
+
+        builder
+            .HasOne(b => b.ParentComment)
+            .WithMany(c => c.Replies)
+            .HasForeignKey(c => c.ParentCommentId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_BlogComments_BlogComments_ParentCommentId")
+            .IsRequired(false);
+
+        builder
+            .HasOne(b => b.Blog)
+            .WithMany(c => c.BlogComments)
+            .HasForeignKey(c => c.BlogId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("FK_BlogComments_Blogs_BlogId");
     }
 }

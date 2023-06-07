@@ -10,9 +10,9 @@ namespace CMSPlus.Application.Factories
     {
         
         private readonly IEmailConfiguration _emailConfiguration;
-        public EmailMessageFactory(IEmailConfiguration emailConfiguration)
+        public EmailMessageFactory()
         {
-            _emailConfiguration = emailConfiguration;
+            _emailConfiguration = EmailConfiguration.Instance;  
         }
         
         /// <summary>
@@ -30,7 +30,7 @@ namespace CMSPlus.Application.Factories
             var mailAddresses = EmailMessageFactoryHelper.GetEmailsFromString(emails);
             foreach (var mail in mailAddresses)
             {
-                mailAddresses.Add(mail);
+               mailMessage.To.Add(mail);
             }
 
             mailMessage.Body = htmlMessage;

@@ -8,12 +8,12 @@ public class TopicProfile:Profile
 {
     public TopicProfile()
     {
-        CreateMap<TopicEntity,TopicViewViewModel>();
-        CreateMap<TopicViewViewModel,TopicEntity>();
-        CreateMap<TopicEntity, TopicDetailsViewViewModel>();
-        CreateMap<TopicEntity, TopicCreateViewModel>();
-        CreateMap<TopicCreateViewModel,TopicEntity>();
-        CreateMap<TopicEntity, TopicEditViewViewModel>();
-        CreateMap<TopicEditViewViewModel,TopicEntity>();
+        CreateMap<TopicEntity,TopicViewViewModel>().ReverseMap();
+        CreateMap<TopicViewViewModel,TopicEntity>().ReverseMap();
+        CreateMap<TopicEntity, TopicDetailsViewViewModel>().ReverseMap();
+        CreateMap<TopicEntity, TopicCreateViewModel>().ReverseMap();
+        CreateMap<TopicCreateViewModel,TopicEntity>().ReverseMap();
+        CreateMap<TopicEntity, TopicEditViewViewModel>().ReverseMap();
+        CreateMap<TopicEditViewViewModel,TopicEntity>().ReverseMap();
     }
 }

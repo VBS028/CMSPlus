@@ -13,4 +13,6 @@ public class BlogCommentViewModel
     public string Body { get; set; }
     public DateTime? CreatedOnUtc { get; set; }
     public DateTime? UpdatedOnUtc { get; set; }
+    public int Level { get; set; }
+    public List<BlogCommentViewModel> Replies { get; set; }
 }

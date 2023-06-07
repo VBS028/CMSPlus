@@ -3,6 +3,9 @@ using CMSPlus.Domain.Entities;
 using CMSPlus.Domain.Interfaces;
 using CMSPlus.Domain.Interfaces.Services;
 using CMSPlus.Domain.Models.TopicModels;
+using CMSPlus.Infrastructure.Enums;
+using CMSPlus.Presentation.Adapters;
+using CMSPlus.Presentation.Models.BlogModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +23,8 @@ public class TopicController : Controller
     private readonly IValidator<TopicCreateViewModel> _createModelValidator;
     private readonly IEmailSender _emailSender;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IBlogService _blogService;
+    private readonly IStrategyResolver<IAdapter> _adapterResolver;
 
 
     public TopicController(
@@ -28,7 +33,7 @@ public class TopicController : Controller
         IValidator<TopicEditViewViewModel> editModelValidator, 
         IValidator<TopicCreateViewModel> createModelValidator, 
         IEmailSender emailSender, 
-        UserManager<IdentityUser> userManager)
+        UserManager<IdentityUser> userManager, IBlogService blogService, IStrategyResolver<IAdapter> adapterResolver)
     {
         _topicService = topicService;
         _mapper = mapper;
@@ -36,6 +41,8 @@ public class TopicController : Controller
         _createModelValidator = createModelValidator;
         _emailSender = emailSender;
         _userManager = userManager;
+        _blogService = blogService;
+        _adapterResolver = adapterResolver;
     }
     
     [AllowAnonymous]
@@ -143,15 +150,30 @@ public class TopicController : Controller
     [Authorize(Permissions.Topic.GetEmail)]
     [HttpPost]
     [ActionName("Details")]
-    public async Task<IActionResult> DetailsToEmail(string body)
+    public async Task<IActionResult> DetailsToEmail(TopicDetailsViewViewModel model)
     {
         var user = this.User;
         if (user == null)
         {
             RedirectToPage("/Account/Login", new {area="Identity"});
         }
+
+        var topic = _mapper.Map<TopicDetailsViewViewModel, TopicEntity>(model);
+        var json = _adapterResolver.GetStrategy(EntityTypes.Json).GetData(topic).ToString();
         var identityUser = await _userManager.GetUserAsync(user);
-        await _emailSender.SendEmailAsync(identityUser.Email,"Test email",body);
+        await _emailSender.SendEmailAsync(identityUser.Email,"Test email",json);
         return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CopyAsBlog(int id)
+    {
+        var topic = await _topicService.GetById(id);
+
+        var blog = _adapterResolver.GetStrategy(EntityTypes.Blog).GetData(topic) as BlogEntity;
+
+        await _blogService.Create(blog);
+
+        return RedirectToAction("Details", "Blog", new { id = blog.Id });
     }
 }

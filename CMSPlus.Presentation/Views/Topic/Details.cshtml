@@ -9,11 +9,16 @@
 <partial name="_TopicDetailsPartial"/>
 
 <form method="post" class="m-3">
-    <input hidden asp-for="Body"></input>
+    @Html.HiddenFor(x=> x.Title)
+    @Html.HiddenFor(x=> x.Body)
+    @Html.HiddenFor(x=> x.SystemName)
     @if (User.Identity.IsAuthenticated)
     {
         <div class="col-6 text-start">
-            <button type="submit" class="btn btn-primary">Get body to email</button>
+            <button type="submit" class="btn btn-primary">Get to email</button>
+        </div>
+        <div class="col-6 text-end">
+            <button type="submit" asp-action="CopyAsBlog" asp-route-id="@Model.Id" class="btn btn-primary">Copy as blog</button>
         </div>
     }
 </form>
