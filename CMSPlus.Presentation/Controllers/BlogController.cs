@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using AutoMapper;
+using CMSPlus.Application.Extentions;
 using CMSPlus.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -138,6 +139,11 @@ public class BlogController : Controller
         var commentEntity = _mapper.Map<BlogCommentCreateViewModel, BlogCommentEntity>(comment);
         commentEntity.Username = identityUser.UserName;
         commentEntity.ParentCommentId = comment.ParentCommentId > 0 ? comment.ParentCommentId : null;
+        if (commentEntity.ParentCommentId != null)
+        {
+            var parent = await _blogCommentsService.GetById(commentEntity.ParentCommentId.Value);
+            parent.Accept(commentEntity);
+        }
         if (comment.Files != null)
         {
             var rootPath = _configuration.GetValue<string>("AttachmentsPath");
