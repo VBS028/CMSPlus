@@ -13,6 +13,7 @@
     @using (Html.BeginForm("Details", "Blog", FormMethod.Post,new {enctype="multipart/form-data"}))
     {
         <input hidden asp-for="BlogId"></input>
+        <input hidden asp-for="ParentCommentId"/>
         <textarea asp-for="Body"></textarea>
         <h6 class="text-black my-3">Upload attachments: </h6>
         <div class="row">

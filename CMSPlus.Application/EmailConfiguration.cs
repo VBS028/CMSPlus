@@ -11,16 +11,17 @@ public class EmailConfiguration:IEmailConfiguration
     private EmailConfiguration()
     {
         var builder = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
 
         var configuration = builder.Build();
 
-        FromAddress = configuration[nameof(FromAddress)];
-        Address = configuration[nameof(Address)];
-        Port = Convert.ToInt32(configuration[nameof(Port)]);
-        UseSsl = Convert.ToBoolean(configuration[nameof(UseSsl)]);
-        Username = configuration[nameof(Username)];
-        Password = configuration[nameof(Password)];
+        FromAddress = configuration["EmailConfiguration:FromAddress"];
+        Address = configuration["EmailConfiguration:Address"];
+        Port = Convert.ToInt32(configuration["EmailConfiguration:Port"]);
+        UseSsl = Convert.ToBoolean(configuration["EmailConfiguration:UseSsl"]);
+        Username = configuration["EmailConfiguration:UserName"];
+        Password = configuration["EmailConfiguration:Password"];
     }
 
     public static EmailConfiguration Instance

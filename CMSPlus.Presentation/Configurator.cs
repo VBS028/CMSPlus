@@ -2,10 +2,12 @@ using CMSPlus.Application.Services.EmailService;
 using CMSPlus.Domain.Interfaces;
 using CMSPlus.Domain.Models.TopicModels;
 using CMSPlus.Domain.Persistence;
+using CMSPlus.Presentation.Adapters;
 using CMSPlus.Presentation.AutoMapperProfiles;
 using CMSPlus.Presentation.CustomPolicy;
 using CMSPlus.Presentation.CustomPolicy.CustomHandlers;
 using CMSPlus.Presentation.CustomPolicy.CustomPolicyProviders;
+using CMSPlus.Presentation.StrategyResolvers;
 using CMSPlus.Presentation.Validations.Helpers;
 using CMSPlus.Presentation.Validations.TopicValidators;
 using FluentValidation;
@@ -39,6 +41,11 @@ public static class Configurator
         services.AddControllersWithViews();
         services.AddScoped<IEmailSender,EmailSender>();
         services.AddScoped<IExtendedEmailSender,ExtendedEmailSender>();
+
+        services.AddScoped<IAdapter, BlogAdapter>();
+        services.AddScoped<IAdapter, JsonAdapter>();
+
+        services.AddScoped<IStrategyResolver<IAdapter>, AdapterStrategyResolver>();
     }
 
     public static void AddAutoMapper(this IServiceCollection services)

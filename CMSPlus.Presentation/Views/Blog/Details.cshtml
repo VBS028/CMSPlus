@@ -32,11 +32,5 @@
 
 @foreach (var comment in Model.Comments)
 {
-    <div class="container m-2 border rounded-1">
-        <div class="row">
-            <p class="text-bold text-start mt-1 col-6" style="font-weight: bold">@comment.Username</p>
-            <p class="text-black-50 text-end mt-1 col-6">Updated: @comment.UpdatedOnUtc</p>
-        </div>
-        <p class="text-dark">@Html.Raw(comment.Body)</p>
-    </div>
+    @Html.Partial("_CommentPartial", comment)
 }

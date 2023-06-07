@@ -39,6 +39,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Remove="Migrations\V1_4_3__RenameAuthorId_to_Author.sql" />
+    <None Remove="Migrations\V1_5_1__AddCommentReplies.sql" />
+    <Content Include="Migrations\V1_5_1__AddCommentReplies.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

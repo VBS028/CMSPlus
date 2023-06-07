@@ -1,5 +1,8 @@
 using CMSPlus.Domain;
 using CMSPlus.Application;
+using CMSPlus.Application.Extentions;
+using CMSPlus.Application.Services;
+using CMSPlus.Domain.Interfaces;
 using CMSPlus.Infrastructure;
 
 namespace CMSPlus.Presentation;
@@ -21,11 +24,14 @@ public class Startup
         services.AddSingleton(Configuration);
         services.AddInfrastructure(connectionString);
         services.AddMigrations(connectionString);
-        
+
         services.AddPresentation();
         services.AddAutoMapper();
 
         services.AddServices();
+        services.AddScoped<IVisitorService, CommentVisitorService>();
+
+        CommentExtentions.VisitorService = services.BuildServiceProvider().GetService<IVisitorService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

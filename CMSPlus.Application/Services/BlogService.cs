@@ -15,11 +15,15 @@ public class BlogService : IBlogService
 
     public async Task<BlogEntity> GetById(int id)
     {
+        if (id == 0)
+            throw new ArgumentException();
         return await _repository.GetById(id);
     }
 
     public async Task<BlogEntity?> GetBySystemName(string systemName)
     {
+        if (string.IsNullOrEmpty(systemName))
+            throw new ArgumentException();
         return await _repository.GetBySystemName(systemName);
     }
 

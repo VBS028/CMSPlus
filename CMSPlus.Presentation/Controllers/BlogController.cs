@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using AutoMapper;
+using CMSPlus.Application.Extentions;
 using CMSPlus.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -106,8 +107,22 @@ public class BlogController : Controller
             throw new ArgumentException($"Item with id: {id} wasn't found!");
         }
         var blogViewModel = _mapper.Map<BlogEntity, BlogGetViewViewModel>(blog);
-        blogViewModel.Comments = _mapper.Map<IEnumerable<BlogCommentEntity>, IEnumerable<BlogCommentViewModel>>(blogComments);
+        blogViewModel.Comments = blogComments.Select(x => BuildCommentTree(x, 0));
         return View(blogViewModel);
+    }
+
+    private BlogCommentViewModel BuildCommentTree(BlogCommentEntity commentViewEntity, int level)
+    {
+        var commentViewModel = _mapper.Map<BlogCommentEntity, BlogCommentViewModel>(commentViewEntity);
+        commentViewModel.Replies = new List<BlogCommentViewModel>();
+        commentViewModel.Level = level;
+
+        foreach (var reply in commentViewEntity.Replies)
+        {
+            commentViewModel.Replies.Add(BuildCommentTree(reply, level + 1));
+        }
+
+        return commentViewModel;
     }
 
     [AllowAnonymous]
@@ -120,7 +135,15 @@ public class BlogController : Controller
         {
             return RedirectToPage("/Account/Login", new {area="Identity"});
         }
+
         var commentEntity = _mapper.Map<BlogCommentCreateViewModel, BlogCommentEntity>(comment);
+        commentEntity.Username = identityUser.UserName;
+        commentEntity.ParentCommentId = comment.ParentCommentId > 0 ? comment.ParentCommentId : null;
+        if (commentEntity.ParentCommentId != null)
+        {
+            var parent = await _blogCommentsService.GetById(commentEntity.ParentCommentId.Value);
+            parent.Accept(commentEntity);
+        }
         if (comment.Files != null)
         {
             var rootPath = _configuration.GetValue<string>("AttachmentsPath");
